@@ -92,8 +92,12 @@ fun ShopTheme(
 
     val sysUiController = rememberSystemUiController()
     SideEffect {
-        sysUiController.setSystemBarsColor(
+        sysUiController.setStatusBarColor(
             color = colors.uiBackground.copy(alpha = AlphaNearOpaque)
+        )
+        sysUiController.setNavigationBarColor(
+            color = colors.uiBackground.copy(alpha = AlphaNearOpaque)
+//            color = colors.brand.copy(alpha = AlphaNearOpaque)
         )
     }
 
