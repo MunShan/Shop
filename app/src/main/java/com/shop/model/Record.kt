@@ -1,18 +1,39 @@
 package com.shop.model
 
+import androidx.room.*
 import java.util.*
 
+@Entity
 data class Record(
-    val id : Int,
+    @PrimaryKey
+    val id: Int,
 //    var isPush : Boolean = false,
-    var isReserve : Boolean = false,
-    val recordTime : Date,
-    val msg : String? = null,
+    var status: Boolean = false,
+    @ColumnInfo(name = "record_time")
+    val recordTime: Date,
+    val msg: String? = null,
 )
 
+@Entity(tableName = "record_item")
 data class RecordItem(
-    val id : Int,
-    val goodsName : String,
-    var nums : Int = 0,
-    var price : Float = 0f,
+    @PrimaryKey
+    val id: Int,
+    @ColumnInfo(name = "record_id")
+    val recordId: Int,
+    @ColumnInfo(name = "goods_name")
+    val goodsName: String,
+    var nums: Int = 0,
+    var price: Float = 0f,
 )
+
+@Dao
+interface RecordDao {
+    @Query("SELECT * FROM Record")
+    suspend fun getAllRecord(): List<Record>
+
+    @Update
+    suspend fun changeRecordStatus(record: Record)
+
+    @Query("SELECT * FROM record_item where record_id = :recordId")
+    suspend fun recordDetails(recordId: Int): List<RecordItem>
+}

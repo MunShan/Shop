@@ -20,6 +20,10 @@ import kotlinx.coroutines.launch
 
 object MainDestinations {
     const val HOME_ROUTE = "home"
+    const val GOODS_EDIT_ROUTE = "goods_edit"
+    const val GOODS_EDIT_KEY = "goods_edit"
+    const val ORDER_LIST_ROUTE = "order_list"
+    const val RECORD_DETAILS_ROUTE = "record_details"
 }
 
 @Composable
@@ -104,7 +108,7 @@ class ShopAppState(
         }
     }
 
-    fun navigateToSnackDetail(snackId: Long, from: NavBackStackEntry) {
+    fun navigateToGoodsEdit(snackId: Long, from: NavBackStackEntry) {
         // In order to discard duplicated navigation events, we check the Lifecycle
         if (from.lifecycleIsResumed()) {
 

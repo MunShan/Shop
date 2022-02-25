@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.navDeepLink
 import com.google.accompanist.insets.statusBarsHeight
 import com.shop.model.Goods
 import com.shop.ui.components.ShopDivider
@@ -18,7 +20,13 @@ import com.shop.ui.home.DestinationBar
 fun Goods(modifier: Modifier = Modifier) {
     ShopSurface(modifier.fillMaxSize()) {
         Box {
-            DestinationBar()
+            DestinationBar(
+                title = "下单",
+                otherClickAction = {
+
+                }
+            )
+            GoodsList(goodsList = mutableListOf())
         }
     }
 }
@@ -47,5 +55,5 @@ private fun GoodsList(
 private fun GoodsItem(
     goods: Goods
 ) {
-
+    Text(text = goods.name)
 }

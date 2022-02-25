@@ -7,7 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.systemBarsPadding
@@ -15,6 +18,7 @@ import com.shop.ui.components.ShopScaffold
 import com.shop.ui.home.HomeSections
 import com.shop.ui.home.ShopBottomBar
 import com.shop.ui.home.addHomeGraph
+import com.shop.ui.home.goods.GoodsEdit
 import com.shop.ui.theme.ShopTheme
 
 @Composable
@@ -69,5 +73,26 @@ private fun NavGraphBuilder.shopNavGraph(
         startDestination = HomeSections.ORDER.route
     ) {
         addHomeGraph()
+    }
+    composable(
+        MainDestinations.GOODS_EDIT_ROUTE + "/" + MainDestinations.GOODS_EDIT_KEY,
+        arguments = listOf(
+            navArgument(MainDestinations.GOODS_EDIT_KEY) {
+                type = NavType.IntType
+            }
+        )
+    ) {
+        val goodsId = it.arguments?.getInt(MainDestinations.GOODS_EDIT_KEY)
+        GoodsEdit()
+    }
+    composable(
+        MainDestinations.ORDER_LIST_ROUTE
+    ) {
+
+    }
+    composable(
+        MainDestinations.RECORD_DETAILS_ROUTE
+    ) {
+
     }
 }

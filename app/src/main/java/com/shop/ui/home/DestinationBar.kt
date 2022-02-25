@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -22,7 +21,7 @@ import com.shop.ui.theme.ShopTheme
 fun DestinationBar(
     modifier: Modifier = Modifier,
     title : String = "",
-    leftClickAction : (()->Unit)? = null,
+    otherClickAction : (()->Unit)? = null,
     imageVector: ImageVector? = Icons.Outlined.ExpandMore
 ) {
     Column(modifier = modifier.statusBarsPadding()) {
@@ -42,9 +41,9 @@ fun DestinationBar(
                     .weight(1f)
                     .align(Alignment.CenterVertically)
             )
-            if (leftClickAction != null && imageVector != null) {
+            if (otherClickAction != null && imageVector != null) {
                 IconButton(
-                    onClick =leftClickAction,
+                    onClick =otherClickAction,
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
                     Icon(
