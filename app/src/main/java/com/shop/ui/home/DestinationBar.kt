@@ -31,7 +31,7 @@ fun DestinationBar(
             elevation = 0.dp
         ) {
             Text(
-                text = "Delivery to 1600 Amphitheater Way",
+                text = title,
                 style = MaterialTheme.typography.subtitle1,
                 color = ShopTheme.colors.textSecondary,
                 textAlign = TextAlign.Center,
@@ -43,7 +43,7 @@ fun DestinationBar(
             )
             if (otherClickAction != null && imageVector != null) {
                 IconButton(
-                    onClick =otherClickAction,
+                    onClick = otherClickAction,
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
                     Icon(

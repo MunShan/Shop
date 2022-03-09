@@ -1,6 +1,5 @@
 package com.shop.model
 
-import android.net.Uri
 import androidx.room.*
 
 @Entity
@@ -8,7 +7,7 @@ data class Goods(
     @PrimaryKey
     @ColumnInfo(name = "goods_id")
     var goodsId : Int = 0,
-    var uri : Uri? = null,
+    var uri : String? = null,
     val name : String,
     val stock : Int = 0,
     val price : Float = 0f,

@@ -3,6 +3,7 @@ import com.shop.buildsrc.Libs
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
     id 'kotlin-parcelize'
 }
 
@@ -81,7 +82,7 @@ dependencies {
 
     implementation Libs.AndroidX.Room.runtime
     implementation Libs.AndroidX.Room.ktx
-    annotationProcessor Libs.AndroidX.Room.compiler
+    kapt    Libs.AndroidX.Room.compiler
 
     androidTestImplementation Libs.JUnit.junit
     androidTestImplementation Libs.AndroidX.Test.core

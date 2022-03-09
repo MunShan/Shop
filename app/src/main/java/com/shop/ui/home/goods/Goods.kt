@@ -9,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.navDeepLink
 import com.google.accompanist.insets.statusBarsHeight
 import com.shop.model.Goods
 import com.shop.ui.components.ShopDivider
@@ -17,22 +16,26 @@ import com.shop.ui.components.ShopSurface
 import com.shop.ui.home.DestinationBar
 
 @Composable
-fun Goods(modifier: Modifier = Modifier) {
+fun Goods(editGoods: (goodsId: Int?) -> Unit, modifier: Modifier = Modifier) {
     ShopSurface(modifier.fillMaxSize()) {
         Box {
             DestinationBar(
                 title = "下单",
                 otherClickAction = {
-
+                    editGoods(null)
                 }
             )
-            GoodsList(goodsList = mutableListOf())
+            GoodsList(
+                editGoods,
+                goodsList = mutableListOf()
+            )
         }
     }
 }
 
 @Composable
 private fun GoodsList(
+    editGoods: (goodsId: Int?) -> Unit,
     goodsList: List<Goods>,
     modifier: Modifier = Modifier
 ) {

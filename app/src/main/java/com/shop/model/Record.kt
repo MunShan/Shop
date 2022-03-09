@@ -9,8 +9,9 @@ data class Record(
     val id: Int,
 //    var isPush : Boolean = false,
     var status: Boolean = false,
+    // yyyy-mm-dd
     @ColumnInfo(name = "record_time")
-    val recordTime: Date,
+    val recordTime: String,
     val msg: String? = null,
 )
 

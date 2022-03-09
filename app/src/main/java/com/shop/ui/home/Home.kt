@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.core.os.ConfigurationCompat
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.google.accompanist.insets.navigationBarsPadding
@@ -72,6 +73,7 @@ import com.shop.ui.home.record.Record
 import com.shop.ui.theme.ShopTheme
 
 fun NavGraphBuilder.addHomeGraph(
+    editGoods: (Int?, NavBackStackEntry) -> Unit,
     modifier: Modifier = Modifier
 ) {
     composable(HomeSections.ORDER.route) {
@@ -80,8 +82,10 @@ fun NavGraphBuilder.addHomeGraph(
     composable(HomeSections.RECORD.route) {
         Record(modifier)
     }
-    composable(HomeSections.GOODS.route) {
-        Goods(modifier)
+    composable(HomeSections.GOODS.route) { from ->
+        Goods({ goodsId ->
+            editGoods(goodsId, from)
+        }, modifier)
     }
 }
 
