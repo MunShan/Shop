@@ -6,36 +6,53 @@ import androidx.room.*
 data class Goods(
     @PrimaryKey
     @ColumnInfo(name = "goods_id")
-    var goodsId : Int = 0,
-    var uri : String? = null,
-    val name : String,
-    val stock : Int = 0,
-    val price : Float = 0f,
+    var goodsId: Int = 0,
+    var uri: String? = null,
+    val name: String = "",
+    val stock: Int = 0,
+    val price: Float = 0f,
 )
 
 @Dao
-interface GoodsDao{
+interface GoodsDao {
     @Query("SELECT * FROM Goods")
-    suspend fun getAll() : List<Goods>
+    suspend fun getAll(): List<Goods>
+
+    @Query("SELECT * FROM Goods Where goods_id = :goodsId")
+    suspend fun findGoods(goodsId: Int): Goods?
+
     @Delete
     suspend fun deleteGoods(goods: Goods)
+
     @Update
     suspend fun editGoods(goods: Goods)
+
     @Insert
     suspend fun addGoods(goods: Goods)
 }
 
 object GoodsRepo {
+    private val goodsDao = getDB()?.goodsDao()
     fun getGoodsList() {
 
     }
-    fun editGoods() {
 
+    suspend fun findGoods(goodsId: Int?): Goods {
+        if (goodsId == null || goodsId < 0) {
+            return Goods()
+        }
+        return goodsDao?.findGoods(goodsId) ?: Goods()
     }
+
     fun deleteGoods() {
 
     }
-    fun addGoods() {
 
+    suspend fun editOrAddGoods(goods: Goods) {
+        if (goods.goodsId <= 0) {
+            goodsDao?.addGoods(goods)
+        } else {
+            goodsDao?.editGoods(goods)
+        }
     }
 }

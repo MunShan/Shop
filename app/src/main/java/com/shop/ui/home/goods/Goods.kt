@@ -20,7 +20,7 @@ fun Goods(editGoods: (goodsId: Int?) -> Unit, modifier: Modifier = Modifier) {
     ShopSurface(modifier.fillMaxSize()) {
         Box {
             DestinationBar(
-                title = "下单",
+                title = "paper",
                 otherClickAction = {
                     editGoods(null)
                 }
