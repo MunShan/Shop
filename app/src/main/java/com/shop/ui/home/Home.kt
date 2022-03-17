@@ -74,18 +74,23 @@ import com.shop.ui.theme.ShopTheme
 
 fun NavGraphBuilder.addHomeGraph(
     editGoods: (Int?, NavBackStackEntry) -> Unit,
-    modifier: Modifier = Modifier
+    clickRecordDetails: (Int, NavBackStackEntry) -> Unit,
+    clickOrder: (NavBackStackEntry) -> Unit,
 ) {
-    composable(HomeSections.ORDER.route) {
-        Order(modifier)
+    composable(HomeSections.ORDER.route) {from ->
+        Order({
+            clickOrder(from)
+        })
     }
-    composable(HomeSections.RECORD.route) {
-        Record(modifier)
+    composable(HomeSections.RECORD.route) { from ->
+        Record({ recordId ->
+            clickRecordDetails(recordId, from)
+        })
     }
     composable(HomeSections.GOODS.route) { from ->
         Goods({ goodsId ->
             editGoods(goodsId, from)
-        }, modifier)
+        })
     }
 }
 

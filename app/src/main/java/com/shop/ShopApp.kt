@@ -1,31 +1,25 @@
 package com.shop
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.insets.systemBarsPadding
 import com.shop.ui.components.ShopScaffold
 import com.shop.ui.home.HomeSections
 import com.shop.ui.home.ShopBottomBar
 import com.shop.ui.home.addHomeGraph
 import com.shop.ui.home.goods.GoodsEdit
-import com.shop.ui.theme.Neutral8
+import com.shop.ui.home.order.OrderList
+import com.shop.ui.home.record.RecordDetails
 import com.shop.ui.theme.ShopTheme
-import com.shop.ui.utils.mirroringBackIcon
+
 
 @Composable
 fun ShopApp() {
@@ -66,7 +60,9 @@ fun ShopApp() {
                 ) {
                     shopNavGraph(
                         editGoods = appState::navigateToGoodsEdit,
-                        upPress = appState::upPress
+                        clickRecordDetails = appState::navigateToRecordDetails,
+                        upPress = appState::upPress,
+                        clickOrder = appState::navigateOrderList
                     )
                 }
             }
@@ -75,14 +71,16 @@ fun ShopApp() {
 }
 
 private fun NavGraphBuilder.shopNavGraph(
-    editGoods: (Int?,NavBackStackEntry)-> Unit,
+    editGoods: (Int?, NavBackStackEntry) -> Unit,
+    clickRecordDetails: (Int, NavBackStackEntry) -> Unit,
+    clickOrder: (NavBackStackEntry) -> Unit,
     upPress: () -> Unit
 ) {
     navigation(
         route = MainDestinations.HOME_ROUTE,
         startDestination = HomeSections.ORDER.route
     ) {
-        addHomeGraph(editGoods)
+        addHomeGraph(editGoods, clickRecordDetails, clickOrder)
     }
     composable(
         "${MainDestinations.GOODS_EDIT_ROUTE}/{${MainDestinations.GOODS_EDIT_KEY}}",
@@ -94,40 +92,27 @@ private fun NavGraphBuilder.shopNavGraph(
     ) {
         val goodsId = it.arguments?.getInt(MainDestinations.GOODS_EDIT_KEY) ?: -1
         GoodsEdit(
-            goodsId = goodsId
-        ) {
-            Up(upPress)
-        }
+            goodsId = goodsId,
+            upPress = upPress
+        )
+    }
+    composable(
+        "${MainDestinations.RECORD_DETAILS_ROUTE}/{${MainDestinations.RECORD_ID_KEY}}",
+        arguments = listOf(
+            navArgument(MainDestinations.RECORD_ID_KEY) {
+                type = NavType.IntType
+            }
+        )
+    ) {
+        val recordId = it.arguments?.getInt(MainDestinations.RECORD_ID_KEY) ?: -1
+        RecordDetails(
+            recordId = recordId,
+            upPress = upPress
+        )
     }
     composable(
         MainDestinations.ORDER_LIST_ROUTE
     ) {
-
-    }
-    composable(
-        MainDestinations.RECORD_DETAILS_ROUTE
-    ) {
-
-    }
-}
-
-@Composable
-private fun Up(upPress: () -> Unit) {
-    IconButton(
-        onClick = upPress,
-        modifier = Modifier
-            .statusBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 10.dp)
-            .size(36.dp)
-            .background(
-                color = Neutral8.copy(alpha = 0.32f),
-                shape = CircleShape
-            )
-    ) {
-        Icon(
-            imageVector = mirroringBackIcon(),
-            tint = ShopTheme.colors.iconInteractive,
-            contentDescription = stringResource(R.string.label_back)
-        )
+        OrderList(upPress = upPress)
     }
 }

@@ -8,11 +8,13 @@ data class Record(
     @PrimaryKey
     val id: Int,
 //    var isPush : Boolean = false,
-    var status: Boolean = false,
+    var given: Boolean = false,
     // yyyy-mm-dd
     @ColumnInfo(name = "record_time")
     val recordTime: String,
     val msg: String? = null,
+    @ColumnInfo(name = "sum_prices")
+    val sumPrices: Float = 0f,
 )
 
 @Entity(tableName = "record_item")
@@ -37,4 +39,18 @@ interface RecordDao {
 
     @Query("SELECT * FROM record_item where record_id = :recordId")
     suspend fun recordDetails(recordId: Int): List<RecordItem>
+
+}
+
+object RecordRepo {
+    private val recordDao = getDB()?.recordDao()
+
+    suspend fun changeRecordStatus(record: Record) {
+        recordDao?.changeRecordStatus(record = record)
+    }
+
+    suspend fun getAllRecord() = recordDao?.getAllRecord() ?: listOf()
+
+    suspend fun getRecordDetails(recordId: Int) = recordDao?.recordDetails(recordId) ?: listOf()
+
 }

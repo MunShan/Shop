@@ -15,13 +15,15 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.shop.ui.components.ShopDivider
 import com.shop.ui.theme.AlphaNearOpaque
 import com.shop.ui.theme.ShopTheme
+import com.shop.ui.utils.mirroringBackIcon
 
 
 @Composable
 fun DestinationBar(
     modifier: Modifier = Modifier,
-    title : String = "",
-    otherClickAction : (()->Unit)? = null,
+    title: String = "",
+    upPress: (() -> Unit)? = null,
+    otherClickAction: (() -> Unit)? = null,
     imageVector: ImageVector? = Icons.Outlined.ExpandMore
 ) {
     Column(modifier = modifier.statusBarsPadding()) {
@@ -30,6 +32,18 @@ fun DestinationBar(
             contentColor = ShopTheme.colors.textSecondary,
             elevation = 0.dp
         ) {
+            if (upPress != null) {
+                IconButton(
+                    onClick = upPress,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                ) {
+                    Icon(
+                        imageVector = mirroringBackIcon(),
+                        tint = ShopTheme.colors.brand,
+                        contentDescription = ""
+                    )
+                }
+            }
             Text(
                 text = title,
                 style = MaterialTheme.typography.subtitle1,

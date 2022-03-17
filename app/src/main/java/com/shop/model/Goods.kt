@@ -8,7 +8,7 @@ data class Goods(
     @ColumnInfo(name = "goods_id")
     var goodsId: Int = 0,
     var uri: String? = null,
-    val name: String = "",
+    var name: String = "",
     val stock: Int = 0,
     val price: Float = 0f,
 )
@@ -21,8 +21,8 @@ interface GoodsDao {
     @Query("SELECT * FROM Goods Where goods_id = :goodsId")
     suspend fun findGoods(goodsId: Int): Goods?
 
-    @Delete
-    suspend fun deleteGoods(goods: Goods)
+    @Query("DELETE FROM Goods WHERE goods_id = :goods")
+    fun deleteGoods(goods: Int)
 
     @Update
     suspend fun editGoods(goods: Goods)
@@ -33,9 +33,7 @@ interface GoodsDao {
 
 object GoodsRepo {
     private val goodsDao = getDB()?.goodsDao()
-    fun getGoodsList() {
-
-    }
+    suspend fun getGoodsList() = goodsDao?.getAll() ?: listOf()
 
     suspend fun findGoods(goodsId: Int?): Goods {
         if (goodsId == null || goodsId < 0) {
@@ -44,8 +42,8 @@ object GoodsRepo {
         return goodsDao?.findGoods(goodsId) ?: Goods()
     }
 
-    fun deleteGoods() {
-
+    fun deleteGoods(goodsId: Int) {
+        goodsDao?.deleteGoods(goodsId)
     }
 
     suspend fun editOrAddGoods(goods: Goods) {

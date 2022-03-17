@@ -1,4 +1,4 @@
-package com.shop.ui.home.goods
+package com.shop.ui.home.record
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,49 +7,48 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.shop.model.Goods
-import com.shop.model.GoodsRepo
+import com.shop.model.Record
+import com.shop.model.RecordItem
+import com.shop.model.RecordRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class GoodsViewModel(
-    private val goodsRepository: GoodsRepo = GoodsRepo
-) : ViewModel() {
+class RecordViewModel(private val repo: RecordRepo = RecordRepo) : ViewModel() {
     init {
-        loadGoodsList()
+        loadRecordList()
     }
+    var recordList by mutableStateOf(listOf<Record>())
+    var recordItemList by mutableStateOf(listOf<RecordItem>())
 
-    var editGoods by mutableStateOf(Goods())
-        private set
-    var goodsList by mutableStateOf(listOf<Goods>())
-    var orderMap by mutableStateOf(hashMapOf<Goods, Int>())
-    fun findEditGoods(goodsId: Int?) {
+    private fun loadRecordList() {
         viewModelScope.launch(Dispatchers.IO) {
-            editGoods = withContext(Dispatchers.Main) {
-                goodsRepository.findGoods(goodsId)
+            recordList = withContext(Dispatchers.Main) {
+                repo.getAllRecord()
             }
         }
     }
 
-    fun deleteGoods(goodsId: Int) {
+    fun loadRecordItemList(recordId : Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            goodsRepository.deleteGoods(goodsId = goodsId)
-        }
-    }
-
-    private fun loadGoodsList() {
-        viewModelScope.launch(Dispatchers.IO) {
-            goodsList = withContext(Dispatchers.Main) {
-                goodsRepository.getGoodsList()
+            recordItemList = withContext(Dispatchers.Main) {
+                repo.getRecordDetails(recordId)
             }
         }
     }
 
-    fun editOrAddGoods(goods: Goods) {
-        editGoods = Goods()
+    fun updateRecordStatus(record: Record) {
         viewModelScope.launch(Dispatchers.IO) {
-            goodsRepository.editOrAddGoods(goods)
-            loadGoodsList()
+            repo.changeRecordStatus(record)
+        }
+    }
+
+    fun addRecord(recordMap : Map<Goods,Int>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val record = Record(
+                id = 0,
+                recordTime = "2002-01-02"
+            )
         }
     }
 
@@ -59,7 +58,7 @@ class GoodsViewModel(
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return GoodsViewModel() as T
+                return RecordViewModel() as T
             }
         }
     }

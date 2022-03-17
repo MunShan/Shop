@@ -21,9 +21,12 @@ import kotlinx.coroutines.launch
 object MainDestinations {
     const val HOME_ROUTE = "home"
     const val GOODS_EDIT_ROUTE = "goods_edit"
-    const val GOODS_EDIT_KEY = "edit_key"
     const val ORDER_LIST_ROUTE = "order_list"
     const val RECORD_DETAILS_ROUTE = "record_details"
+
+
+    const val GOODS_EDIT_KEY = "edit_key"
+    const val RECORD_ID_KEY = "record_id_key"
 }
 
 @Composable
@@ -114,6 +117,19 @@ class ShopAppState(
             navController.navigate("${MainDestinations.GOODS_EDIT_ROUTE}/${goodsId?:-1}")
         }
     }
+
+    fun navigateToRecordDetails(recordId : Int, from: NavBackStackEntry) {
+        if (from.lifecycleIsResumed()) {
+            navController.navigate("${MainDestinations.RECORD_DETAILS_ROUTE}/$recordId")
+        }
+    }
+
+    fun navigateOrderList(from: NavBackStackEntry) {
+        if (from.lifecycleIsResumed()) {
+            navController.navigate(MainDestinations.ORDER_LIST_ROUTE)
+        }
+    }
+
 }
 
 private fun NavBackStackEntry.lifecycleIsResumed() =
