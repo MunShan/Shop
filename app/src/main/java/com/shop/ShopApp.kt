@@ -16,7 +16,6 @@ import com.shop.ui.home.HomeSections
 import com.shop.ui.home.ShopBottomBar
 import com.shop.ui.home.addHomeGraph
 import com.shop.ui.home.goods.GoodsEdit
-import com.shop.ui.home.order.OrderList
 import com.shop.ui.home.record.RecordDetails
 import com.shop.ui.theme.ShopTheme
 
@@ -80,7 +79,7 @@ private fun NavGraphBuilder.shopNavGraph(
         route = MainDestinations.HOME_ROUTE,
         startDestination = HomeSections.ORDER.route
     ) {
-        addHomeGraph(editGoods, clickRecordDetails, clickOrder)
+        addHomeGraph(editGoods, clickRecordDetails)
     }
     composable(
         "${MainDestinations.GOODS_EDIT_ROUTE}/{${MainDestinations.GOODS_EDIT_KEY}}",
@@ -109,10 +108,5 @@ private fun NavGraphBuilder.shopNavGraph(
             recordId = recordId,
             upPress = upPress
         )
-    }
-    composable(
-        MainDestinations.ORDER_LIST_ROUTE
-    ) {
-        OrderList(upPress = upPress)
     }
 }

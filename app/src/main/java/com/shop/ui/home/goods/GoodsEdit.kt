@@ -34,9 +34,9 @@ fun GoodsEdit(
 ) {
     Column(Modifier.fillMaxSize()) {
         DestinationBar(
-            title = if (goodsId > 0) "编辑" else "添加",
+            title = if (goodsId >= 0) "编辑" else "添加",
             upPress = upPress,
-            imageVector = if (goodsId > 0) Icons.Outlined.Delete else null,
+            imageVector = if (goodsId >= 0) Icons.Outlined.Delete else null,
             otherClickAction = {
                 upPress()
                 viewModel.deleteGoods(goodsId)
@@ -102,14 +102,17 @@ fun GoodsEdit(
         IconButton(
             onClick = {
                 upPress()
-                viewModel.editOrAddGoods(editState.toGoods())
+                viewModel.editOrAddGoods(editState.toGoods(goodsId))
             },
             modifier = Modifier
                 .align(Alignment.End)
                 .padding(bottom = 30.dp, end = 12.dp)
                 .background(ShopTheme.colors.brandSecondary),
         ) {
-            Text(text = "保存")
+            Text(
+                modifier = Modifier.padding(4.dp),
+                text = "保存"
+            )
         }
     }
 }
@@ -137,7 +140,8 @@ class GoodsEditState(
     var name by mutableStateOf(TextFieldValue(name))
     var price by mutableStateOf(TextFieldValue(price.toString()))
     var count by mutableStateOf(TextFieldValue(count.toString()))
-    fun toGoods() = Goods(
+    fun toGoods(goodsId: Int) = Goods(
+        goodsId = goodsId,
         name = name.text,
         price = price.text.toFloatOrNull() ?: 0f,
         stock = count.text.toIntOrNull() ?: 0

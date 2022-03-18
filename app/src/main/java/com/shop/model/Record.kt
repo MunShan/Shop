@@ -5,7 +5,7 @@ import java.util.*
 
 @Entity
 data class Record(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
 //    var isPush : Boolean = false,
     var given: Boolean = false,
@@ -19,7 +19,7 @@ data class Record(
 
 @Entity(tableName = "record_item")
 data class RecordItem(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
     @ColumnInfo(name = "record_id")
     val recordId: Int,
@@ -40,6 +40,11 @@ interface RecordDao {
     @Query("SELECT * FROM record_item where record_id = :recordId")
     suspend fun recordDetails(recordId: Int): List<RecordItem>
 
+    @Insert
+    fun addRecord(record: Record) : Long
+
+    @Insert
+    suspend fun addRecordItem(recordItems : List<RecordItem>)
 }
 
 object RecordRepo {
@@ -52,5 +57,9 @@ object RecordRepo {
     suspend fun getAllRecord() = recordDao?.getAllRecord() ?: listOf()
 
     suspend fun getRecordDetails(recordId: Int) = recordDao?.recordDetails(recordId) ?: listOf()
+
+    fun addRecord(record: Record) = recordDao?.addRecord(record) ?: 0
+
+    suspend fun addRecordItem(recordItems: List<RecordItem>) = recordDao?.addRecordItem(recordItems)
 
 }

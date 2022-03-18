@@ -1,9 +1,6 @@
 package com.shop.ui.home.goods
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Icon
@@ -11,14 +8,16 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.ChangeCircle
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.statusBarsHeight
+import com.google.accompanist.insets.statusBarsPadding
 import com.shop.model.Goods
 import com.shop.ui.components.ShopDivider
 import com.shop.ui.components.ShopSurface
@@ -31,13 +30,16 @@ fun Goods(
     viewModel: GoodsViewModel = viewModel(factory = GoodsViewModel.provideFactory())
 ) {
     ShopSurface(Modifier.fillMaxSize()) {
-        Box {
+        Column {
             DestinationBar(
                 title = "物品列表",
                 otherClickAction = {
-                    editGoods(null)
-                }
+                    editGoods(-1)
+                },
+                imageVector = Icons.Default.Add
             )
+            // todo
+            viewModel.loadGoodsList()
             val goodsList = viewModel.goodsList
             GoodsList(
                 editGoods,
@@ -51,19 +53,13 @@ fun Goods(
 private fun GoodsList(
     editGoods: (goodsId: Int?) -> Unit,
     goodsList: List<Goods>,
-    modifier: Modifier = Modifier
 ) {
-    Box(modifier) {
-        LazyColumn {
-            item {
-                Spacer(modifier = Modifier.statusBarsHeight(additional = 56.dp))
+    LazyColumn {
+        itemsIndexed(goodsList) { index, goods ->
+            if (index > 0) {
+                ShopDivider(thickness = 2.dp)
             }
-            itemsIndexed(goodsList) { index, goods ->
-                if (index > 0) {
-                    ShopDivider(thickness = 2.dp)
-                }
-                GoodsItem(goods, editGoods = editGoods)
-            }
+            GoodsItem(goods, editGoods = editGoods)
         }
     }
 }
@@ -108,7 +104,7 @@ private fun GoodsItem(
             }
         ) {
             Icon(
-                imageVector = Icons.Outlined.ChangeCircle,
+                imageVector = Icons.Outlined.Edit,
                 tint = ShopTheme.colors.brand,
                 contentDescription = "编辑"
             )

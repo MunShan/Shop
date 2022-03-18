@@ -75,11 +75,10 @@ import com.shop.ui.theme.ShopTheme
 fun NavGraphBuilder.addHomeGraph(
     editGoods: (Int?, NavBackStackEntry) -> Unit,
     clickRecordDetails: (Int, NavBackStackEntry) -> Unit,
-    clickOrder: (NavBackStackEntry) -> Unit,
 ) {
-    composable(HomeSections.ORDER.route) {from ->
+    composable(HomeSections.ORDER.route) { from ->
         Order({
-            clickOrder(from)
+            editGoods(-1, from)
         })
     }
     composable(HomeSections.RECORD.route) { from ->

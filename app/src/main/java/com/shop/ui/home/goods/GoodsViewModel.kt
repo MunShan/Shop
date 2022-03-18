@@ -1,5 +1,6 @@
 package com.shop.ui.home.goods
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,14 +16,12 @@ import kotlinx.coroutines.withContext
 class GoodsViewModel(
     private val goodsRepository: GoodsRepo = GoodsRepo
 ) : ViewModel() {
-    init {
-        loadGoodsList()
-    }
 
     var editGoods by mutableStateOf(Goods())
         private set
     var goodsList by mutableStateOf(listOf<Goods>())
-    var orderMap by mutableStateOf(hashMapOf<Goods, Int>())
+    // todo
+    var orderMap by mutableStateOf(mapOf<Goods, Int>())
     fun findEditGoods(goodsId: Int?) {
         viewModelScope.launch(Dispatchers.IO) {
             editGoods = withContext(Dispatchers.Main) {
@@ -34,10 +33,12 @@ class GoodsViewModel(
     fun deleteGoods(goodsId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             goodsRepository.deleteGoods(goodsId = goodsId)
+            loadGoodsList()
         }
     }
 
-    private fun loadGoodsList() {
+    fun loadGoodsList() {
+        Log.d(TAG, "loadGoodsList: goods $this")
         viewModelScope.launch(Dispatchers.IO) {
             goodsList = withContext(Dispatchers.Main) {
                 goodsRepository.getGoodsList()
@@ -54,6 +55,7 @@ class GoodsViewModel(
     }
 
     companion object {
+        private const val TAG = "GoodsViewModel"
         fun provideFactory(
 
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {

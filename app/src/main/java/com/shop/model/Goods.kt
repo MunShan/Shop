@@ -4,12 +4,12 @@ import androidx.room.*
 
 @Entity
 data class Goods(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "goods_id")
     var goodsId: Int = 0,
     var uri: String? = null,
     var name: String = "",
-    val stock: Int = 0,
+    var stock: Int = 0,
     val price: Float = 0f,
 )
 
@@ -29,6 +29,9 @@ interface GoodsDao {
 
     @Insert
     suspend fun addGoods(goods: Goods)
+
+    @Update
+    fun updateGoods(goods : List<Goods>)
 }
 
 object GoodsRepo {
@@ -47,10 +50,13 @@ object GoodsRepo {
     }
 
     suspend fun editOrAddGoods(goods: Goods) {
-        if (goods.goodsId <= 0) {
+        if (goods.goodsId < 0) {
+            goods.goodsId = 0
             goodsDao?.addGoods(goods)
         } else {
             goodsDao?.editGoods(goods)
         }
     }
+
+    fun updateGoods(goods: List<Goods>) = goodsDao?.updateGoods(goods)
 }
